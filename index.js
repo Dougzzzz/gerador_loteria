@@ -1,48 +1,34 @@
+import chalk from 'chalk';
+import promptSync from 'prompt-sync';
 
-let numDezenas = 6;
-let intervalo = 60;
+const prompt = promptSync();
+let numDezenas = prompt(chalk.blue("Digite o a quantidade dezenas da a serem escolhidas: "));
+let intervalo = prompt(chalk.blue("Digite o maior numero da cartela: "));
 
-console.log(gerarCartela(numDezenas));
+let cartela = [];
 
-
-function gerarCartela (dezenas) {
-    
-    let numLot = new Array(dezenas);
-    alimentaCartela(numLot);
-    eliminaRepetidos(numLot);
-    
-    numLot.sort((a,b) => a - b);
-
-    return numLot;
+for (let i = 0; i < intervalo; i++) {
+    cartela[i] = i + 1;
 }
 
-function nAleatorio (intervalo) {
-    let num = Math.floor(Math.random() * intervalo + 1);
-    return num;
-}
+cartela = fisherYatesShuffle(cartela);
+cartela = separaCartela(cartela, numDezenas)
+console.log(cartela)
 
-function alimentaCartela (arr, dif = 0) {
-    
-    for (let i = 0; i < arr.length + dif; i++) {
-        const element = nAleatorio(intervalo);
-        arr[i] = element;
+
+function fisherYatesShuffle(arr){
+    for(var i =arr.length-1 ; i>0 ;i--){
+        var j = Math.floor( Math.random() * (i + 1) ); //random index
+        [arr[i],arr[j]]=[arr[j],arr[i]]; // swap
     }
+   return arr;
 }
 
-function eliminaRepetidos(array) {
-    novaArray = [...new Set(array)];
-    
-    if (novaArray.length < array.length){
-
-        while (novaArray.length < array.length) {
-            dif = array.length - novaArray.length;
-            novaArray = alimentaCartela(novaArray,dif);
-            novaArray = [...new Set(array)];
-        }
-    }
+function separaCartela (array, numDezenas) {
+    let novaArray = array.slice(0,numDezenas);
+    novaArray.sort((a,b) => a - b)
     return novaArray;
 }
 
 
-//Math.floor(Math.random() * intervalo + 1
 
